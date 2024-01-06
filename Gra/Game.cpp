@@ -7,9 +7,15 @@ void Game::initVariables()
     endgame = false;
     points = 0;
     health = 10;
+    //
     enemySpawnTimer = 0.f;
     enemySpawnTimerMax = 1000.f;
     maxEnemies = 10;
+    //
+    spawnTimerMax = 10.f;
+    spawnTimer = spawnTimerMax;
+    maxObjects = 10;
+
     mouseHeld = false;
 }
 void Game::initWindow()
@@ -19,19 +25,23 @@ void Game::initWindow()
 	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Moja fajna gierka", sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar);
     window->setFramerateLimit(144);
 }
+//
 void Game::initEnemies()
 {   
     enemy.setPosition(0.f,0.f);
     enemy.setSize(sf::Vector2f(100.f, 100.f));
     enemy.setFillColor(sf::Color::Cyan);
- //   this->enemy.setOutlineColor(sf::Color::Green);
- //   this->enemy.setOutlineThickness(1.f);
+
 }
+//
+
 //konstruktor
 Game::Game() {
 	initVariables();
 	initWindow();
+    //
     initEnemies();
+    //
 }
 //dekonstruktor
 Game::~Game() {
@@ -63,6 +73,20 @@ void Game::spawnEnemies()
         );
     enemy.setFillColor(sf::Color::Green);
     enemies.push_back(enemy);
+}
+
+void Game::spawnObjects()
+{
+    //Timer
+    if (spawnTimer < enemySpawnTimerMax) {
+        enemySpawnTimer += 1.f;
+    }
+    else {
+        if (objects.size() < maxObjects) {
+            objects.push_back(Object(*this->window));
+            spawnTimer = 0.f;
+        } 
+    }
 }
 
 void Game::pollEvents()
@@ -120,14 +144,18 @@ void Game::updateEnemies()
     //Move the enemies and updating
     for (int i = 0; i < enemies.size(); i++) {
         bool delated = false;
+        
+        float moveX = static_cast<float>(std::rand() % 3 - 1); // -1, 0, or 1 for horizontal movement
+        float moveY = static_cast<float>(std::rand() % 3 - 1); // -1, 0, or 1 for vertical movement
 
-        enemies[i].move(0.f, 1.f);
+        enemies[i].move(moveX, moveY);
 
         //if enemy is past the bottom of the screen
         if (enemies[i].getPosition().y > window->getSize().y) {
             enemies.erase(enemies.begin() + i);
             health -= 1;
         }
+        //if player touch the enemy
 
     }
     //check if clicked upon
@@ -158,6 +186,8 @@ void Game::updateEnemies()
 //functions
 void Game::update() {
     this->pollEvents();
+    spawnObjects();
+    player.update(window);
     //update mouse position
     //relative to the screen - useeeeeelessssss
     //std::cout << "Mouse pos:" << sf::Mouse::getPosition().x << sf::Mouse::getPosition().y << '\n';
@@ -190,7 +220,14 @@ void Game::render() {
         Renders the game objects.
     */
     window->clear();
+
     //draw game objects
+
+    for (auto i : objects) {
+        i.render(*this->window);
+    }
+
+    player.render(window);
     renderEnemies();
 
     window->display();

@@ -4,10 +4,12 @@
 #include <vector>
 #include <ctime>
 #include <SFML/Graphics.hpp>
-#include <cmath>
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
+#include <cmath>
+#include "Player.h"
+#include "Object.h"
 
 /*
 	Class that acts as the game angine.
@@ -41,6 +43,13 @@ private:
 	//sf::Sprite
 	sf::RectangleShape enemy;
 
+	//Objects
+	Player player;
+	std::vector <Object> objects;
+	float spawnTimerMax;
+	float spawnTimer;
+	int maxObjects;
+
 	//private functions
 	void initVariables();
 	void initWindow();
@@ -56,7 +65,7 @@ public:
 
 	//Functions
 	void spawnEnemies();
-
+	void spawnObjects();
 	void pollEvents();
 	void updateMousePositions();
 	void updateEnemies();
