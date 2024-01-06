@@ -2,41 +2,80 @@
 //private funcions
 void Game::initVariables()
 {
-	this->window = nullptr;
+    window = nullptr;
+    //Game logic
+    endgame = false;
+    points = 0;
+    health = 5;
+    enemySpawnTimer = 0.f;
+    enemySpawnTimerMax = 1000.f;
+    maxEnemies = 10;
+    mouseHeld = false;
 }
 void Game::initWindow()
 {
-	this->videoMode.height = 600;
-	this->videoMode.width = 800;
-	this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Moja fajna gierka", sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar);
+	videoMode.height = 600;
+	videoMode.width = 800;
+	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Moja fajna gierka", sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar);
+    window->setFramerateLimit(144);
+}
+void Game::initEnemies()
+{   
+    enemy.setPosition(0.f,0.f);
+    enemy.setSize(sf::Vector2f(100.f, 100.f));
+    enemy.setFillColor(sf::Color::Cyan);
+ //   enemy.setOutlineColor(sf::Color::Green);
+ //   enemy.setOutlineThickness(1.f);
 }
 //konstruktor
 Game::Game() {
-	this->initVariables();
-	this->initWindow();
+	initVariables();
+	initWindow();
+    initEnemies();
 }
 //dekonstruktor
 Game::~Game() {
-	delete this->window;
+	delete window;
 }
 const bool Game::running() const
 {
-	return this->window->isOpen();
+	return window->isOpen();
+}
+const bool Game::getEndGame() const
+{
+    return endgame;
 }
 //Accessors
 
 
+void Game::spawnEnemies()
+{
+    /*
+    @return void
+    spawns enemies and sets their colors and position
+    -set random position
+    -sets a random color
+    -adds enemy to the vector
+    */
+    enemy.setPosition(
+        static_cast<float>(rand() % static_cast<int>(window->getSize().x - enemy.getSize().x)),
+        static_cast<float>(rand() % static_cast<int>(window->getSize().y - enemy.getSize().y))
+        );
+    enemy.setFillColor(sf::Color::Green);
+    enemies.push_back(enemy);
+}
+
 void Game::pollEvents()
 {
     // Event polling
-    while (this->window->pollEvent(this->ev)) {
-        switch (this->ev.type) {
+    while (window->pollEvent(ev)) {
+        switch (ev.type) {
         case sf::Event::Closed:
-            this->window->close();
+            window->close();
             break;
         case sf::Event::KeyPressed:
-            if (this->ev.key.code == sf::Keyboard::Escape)
-                this->window->close();
+            if (ev.key.code == sf::Keyboard::Escape)
+                window->close();
             break;
         default:
             break;
@@ -44,9 +83,103 @@ void Game::pollEvents()
     }
 }
 
+void Game::updateMousePositions()
+{
+    /*
+    @return void
+    update the mouse positions:
+       - Mouse position relative to window(Vector2i)
+    */
+
+    mousePosWindow = sf::Mouse::getPosition(*this->window);
+    //map to view
+    mousePosView = window->mapPixelToCoords(mousePosWindow);
+}
+
+void Game::updateEnemies()
+{
+    /*
+     @return void
+     Updates the enemy spawn timer and spawn enemies
+     when the total amount of enemies is smaller than max
+     Moves the enemies downwards:
+     Removes the enemies at the edge of the screen /only in y now
+    */
+
+    if (enemies.size() < maxEnemies) {
+
+        if (enemySpawnTimer >= enemySpawnTimerMax) {
+            //spawn the enemy and reset the timer
+            spawnEnemies();
+            enemySpawnTimer = 0.f;
+        }
+        else {
+            enemySpawnTimer += 1.f;
+        }
+    }
+    //Move the enemies and updating
+    for (int i = 0; i < enemies.size(); i++) {
+        bool delated = false;
+
+        enemies[i].move(0.f, 1.f);
+
+        //if enemy is past the bottom of the screen
+        if (enemies[i].getPosition().y > window->getSize().y) {
+            enemies.erase(enemies.begin() + i);
+            health -= 1;
+        }
+
+    }
+    //check if clicked upon
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+        if (mouseHeld == false) {
+
+            mouseHeld = true;
+            bool delated = false;
+            for (size_t i = 0; i < enemies.size() && delated == false; i++) {
+                if (enemies[i].getGlobalBounds().contains(mousePosView)) {
+
+                    //Delate the enemy
+                    delated = true;
+                    enemies.erase(enemies.begin() + i);
+
+                    //Gain points
+                    points += 1.f;
+                }
+            }
+        }
+        
+    }
+    else {
+        mouseHeld = false;
+    }
+}
 //functions
 void Game::update() {
-    this->pollEvents();
+    pollEvents();
+    //update mouse position
+    //relative to the screen - useeeeeelessssss
+    //std::cout << "Mouse pos:" << sf::Mouse::getPosition().x << sf::Mouse::getPosition().y << '\n';
+    //relative to the window
+    //std::cout << "Mouse pos:" 
+    //   << sf::Mouse::getPosition(*this->window).x 
+    //    << sf::Mouse::getPosition(*this->window).y << '\n';
+    if (endgame == false) {
+        updateMousePositions();
+        updateEnemies();
+    }
+    //endgame condition
+    if (health <= 0) {
+        endgame = true;
+    }
+}
+void Game::renderEnemies()
+{   
+    //rendering the enemieFs
+    for (auto& e : enemies) {
+        window->draw(e);
+    }
 }
 void Game::render() {
     /*
@@ -56,7 +189,9 @@ void Game::render() {
     *   display frame in window
         Renders the game objects.
     */
-    this->window->clear(sf::Color(255,0,0,255));
-    //draw game
-    this->window->display();
+    window->clear();
+    //draw game objects
+    renderEnemies();
+
+    window->display();
 }
