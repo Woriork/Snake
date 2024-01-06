@@ -6,7 +6,7 @@ void Game::initVariables()
     //Game logic
     endgame = false;
     points = 0;
-    health = 5;
+    health = 10;
     enemySpawnTimer = 0.f;
     enemySpawnTimerMax = 1000.f;
     maxEnemies = 10;
@@ -24,8 +24,8 @@ void Game::initEnemies()
     enemy.setPosition(0.f,0.f);
     enemy.setSize(sf::Vector2f(100.f, 100.f));
     enemy.setFillColor(sf::Color::Cyan);
- //   enemy.setOutlineColor(sf::Color::Green);
- //   enemy.setOutlineThickness(1.f);
+ //   this->enemy.setOutlineColor(sf::Color::Green);
+ //   this->enemy.setOutlineThickness(1.f);
 }
 //konstruktor
 Game::Game() {
@@ -58,7 +58,7 @@ void Game::spawnEnemies()
     -adds enemy to the vector
     */
     enemy.setPosition(
-        static_cast<float>(rand() % static_cast<int>(window->getSize().x - enemy.getSize().x)),
+        static_cast<float>(rand() % static_cast<int>(this->window->getSize().x - enemy.getSize().x)),
         static_cast<float>(rand() % static_cast<int>(window->getSize().y - enemy.getSize().y))
         );
     enemy.setFillColor(sf::Color::Green);
@@ -137,12 +137,12 @@ void Game::updateEnemies()
 
             mouseHeld = true;
             bool delated = false;
-            for (size_t i = 0; i < enemies.size() && delated == false; i++) {
-                if (enemies[i].getGlobalBounds().contains(mousePosView)) {
+            for (size_t i = 0; i < this->enemies.size() && delated == false; i++) {
+                if (this->enemies[i].getGlobalBounds().contains(this->mousePosView)) {
 
                     //Delate the enemy
                     delated = true;
-                    enemies.erase(enemies.begin() + i);
+                    enemies.erase(this->enemies.begin() + i);
 
                     //Gain points
                     points += 1.f;
@@ -157,7 +157,7 @@ void Game::updateEnemies()
 }
 //functions
 void Game::update() {
-    pollEvents();
+    this->pollEvents();
     //update mouse position
     //relative to the screen - useeeeeelessssss
     //std::cout << "Mouse pos:" << sf::Mouse::getPosition().x << sf::Mouse::getPosition().y << '\n';
@@ -176,8 +176,8 @@ void Game::update() {
 }
 void Game::renderEnemies()
 {   
-    //rendering the enemieFs
-    for (auto& e : enemies) {
+    //rendering the enemies
+    for (auto& e : this->enemies) {
         window->draw(e);
     }
 }
