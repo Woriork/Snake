@@ -28,6 +28,12 @@ Object::~Object()
 
 void Object::update(sf::RenderTarget& target)
 {
+
+}
+
+const sf::CircleShape Object::getShape() const
+{
+    return object;
 }
 
 void Object::render(sf::RenderTarget& target)

@@ -19,6 +19,8 @@ public:
 	Player();
 	virtual ~Player();
 
+	const sf::RectangleShape& getShape() const;
+
 	//Functions
 	void update(const sf::RenderTarget* target);
 	void updateInput();

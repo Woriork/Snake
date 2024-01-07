@@ -12,7 +12,7 @@ void Game::initVariables()
     enemySpawnTimerMax = 1000.f;
     maxEnemies = 10;
     //
-    spawnTimerMax = 10.f;
+    spawnTimerMax = 100.f;
     spawnTimer = spawnTimerMax;
     maxObjects = 10;
 
@@ -183,11 +183,22 @@ void Game::updateEnemies()
         mouseHeld = false;
     }
 }
+void Game::updateCollision()
+{
+    //check the collision
+    for (size_t i = 0; i < objects.size(); i++) {
+        if (player.getShape().getGlobalBounds().intersects(objects[i].getShape().getGlobalBounds())) {
+            objects.erase(objects.begin() + i);
+        }
+    }
+}
 //functions
 void Game::update() {
     this->pollEvents();
+
     spawnObjects();
     player.update(window);
+    updateCollision();
     //update mouse position
     //relative to the screen - useeeeeelessssss
     //std::cout << "Mouse pos:" << sf::Mouse::getPosition().x << sf::Mouse::getPosition().y << '\n';

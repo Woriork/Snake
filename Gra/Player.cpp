@@ -26,22 +26,28 @@ Player::~Player()
 {
 }
 
+const sf::RectangleShape& Player::getShape() const
+{
+	return shape;
+}
+
 void Player::updateInput()
 {
-	//window bounds collision
-	//keyboard input
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-		shape.move(-movementSpeed, 0.f);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-		shape.move(movementSpeed, 0.f);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-		shape.move(0.f,-movementSpeed);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		shape.move(0.f,movementSpeed);
-	}
+sf::Vector2f movement(0.f, 0.f);
+
+if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+    movement.x = -movementSpeed;
+} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+    movement.x = movementSpeed;
+}
+
+if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+    movement.y = -movementSpeed;
+} else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+    movement.y = movementSpeed;
+}
+
+shape.move(movement);
 }
 
 void Player::updateWindowBoundsCollision(const sf::RenderTarget* target)

@@ -25,6 +25,8 @@ public:
 	Object(const sf::RenderWindow& window);
 	virtual ~Object();
 
+	const sf::CircleShape getShape() const;
+
 	//Functions
 	void update(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);

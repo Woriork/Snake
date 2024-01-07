@@ -45,6 +45,7 @@ private:
 
 	//Objects
 	Player player;
+	//food
 	std::vector <Object> objects;
 	float spawnTimerMax;
 	float spawnTimer;
@@ -69,6 +70,7 @@ public:
 	void pollEvents();
 	void updateMousePositions();
 	void updateEnemies();
+	void updateCollision();
 	void update();
 	void renderEnemies();
 	void render();
