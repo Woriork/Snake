@@ -13,14 +13,15 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 set(Sources 
-             Game.cpp 
-             main.cpp
-)
-set (Headers
-            Game.h
-            resource.h
-)
+    Game.cpp
+    Player.cpp
+    Object.cpp 
+    main.cpp)
 
+set (Headers
+    Game.h
+    Player.h
+    Object.h)
 
 add_executable(${PROJECT_NAME} ${Sources} ${Headers} )
 target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics)
@@ -28,9 +29,9 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 if(WIN32)
     add_custom_command(
-        TARGET CMakeSFMLProject
+        TARGET ${PROJECT_NAME}
         COMMENT "Copy OpenAL DLL"
-        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:CMakeSFMLProject>
+        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:${PROJECT_NAME}>
         VERBATIM)
 endif()
 

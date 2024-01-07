@@ -1,0 +1,10 @@
+message("pulling SFML dependency...")
+
+set(SFML_BUILD_GRAPHICS TRUE)
+set(SFML_BUILD_WINDOW TRUE)
+set(SFML_BUILD_AUDIO TRUE)
+set(SFML_BUILD_NETWORK TRUE)
+set(SFML_BUILD_EXAMPLES FALSE)
+set(SFML_BUILD_DOC FALSE)
+
+FetchContent_MakeAvailable(SFML)
