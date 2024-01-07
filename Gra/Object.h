@@ -26,8 +26,7 @@ public:
 	virtual ~Object();
 
 	//Functions
-	void spawnObjects();
-	void update();
+	void update(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);
 };
 

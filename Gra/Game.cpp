@@ -78,8 +78,8 @@ void Game::spawnEnemies()
 void Game::spawnObjects()
 {
     //Timer
-    if (spawnTimer < enemySpawnTimerMax) {
-        enemySpawnTimer += 1.f;
+    if (spawnTimer < spawnTimerMax) {
+        spawnTimer += 1.f;
     }
     else {
         if (objects.size() < maxObjects) {
