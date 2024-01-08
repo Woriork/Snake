@@ -20,10 +20,25 @@ void Game::initVariables()
 }
 void Game::initWindow()
 {
-	videoMode.height = 600;
-	videoMode.width = 800;
-	window = new sf::RenderWindow(sf::VideoMode(800, 600), "Moja fajna gierka", sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar);
+    sf::ContextSettings settings;
+
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
+    settings.antialiasingLevel = 8;
+    settings.majorVersion = 4;
+    settings.minorVersion = 0;
+
+    videoMode.height = 600;
+    videoMode.width = 800;
+    window = new sf::RenderWindow(sf::VideoMode(800, 600), "Moja fajna gierka", sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar, settings);
     window->setFramerateLimit(144);
+
+#ifndef NDEBUG
+    std::cout << "depth bits:" << settings.depthBits << std::endl;
+    std::cout << "stencil bits:" << settings.stencilBits << std::endl;
+    std::cout << "antialiasing level:" << settings.antialiasingLevel << std::endl;
+    std::cout << "version:" << settings.majorVersion << "." << settings.minorVersion << std::endl;
+#endif
 }
 //
 void Game::initEnemies()
