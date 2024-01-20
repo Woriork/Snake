@@ -32,16 +32,8 @@ private:
 	//Game LOGIC
 	bool endgame;
 	unsigned points;
-	int health;
-	float enemySpawnTimer;
-	float enemySpawnTimerMax;
-	int maxEnemies;
 	bool mouseHeld;
 
-	//game objects
-	std::vector<sf::RectangleShape> enemies;
-	//sf::Sprite
-	sf::RectangleShape enemy;
 
 	//Objects
 	Player player;
@@ -54,7 +46,6 @@ private:
 	//private functions
 	void initVariables();
 	void initWindow();
-	void initEnemies();
 
 public:
 	//constructors /destructors
@@ -65,14 +56,12 @@ public:
 	const bool getEndGame() const;
 
 	//Functions
-	void spawnEnemies();
 	void spawnObjects();
 	void pollEvents();
 	void updateMousePositions();
-	void updateEnemies();
+	void updateObjects();
 	void updateCollision();
 	void update();
-	void renderEnemies();
 	void render();
 
 };
