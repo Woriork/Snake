@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Woriork\source\repos\Gra\Gra\build_win64\_deps\sfml-subbuild\CMakeFiles\96cab28191b2a79dd625ccc1bced7cd2\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{8E3723DE-6BE6-3CE2-9F9F-5B802B17F5E0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
