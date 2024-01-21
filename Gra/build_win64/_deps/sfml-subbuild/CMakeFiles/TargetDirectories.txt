@@ -1,0 +1,3 @@
+C:/Users/Woriork/source/repos/Gra/Gra/build_win64/_deps/sfml-subbuild/CMakeFiles/sfml-populate.dir
+C:/Users/Woriork/source/repos/Gra/Gra/build_win64/_deps/sfml-subbuild/CMakeFiles/ALL_BUILD.dir
+C:/Users/Woriork/source/repos/Gra/Gra/build_win64/_deps/sfml-subbuild/CMakeFiles/ZERO_CHECK.dir

@@ -60,6 +60,7 @@ void Object::checkCollision(const sf::RenderWindow& window)
 
 void Object::render(sf::RenderTarget& target)
 {
+
 	target.draw(object);
 }
 

@@ -4,6 +4,7 @@
 void Game::initVariables()
 {
     window = nullptr;
+
     //Game logic
     endgame = false;
     points = 0;
@@ -19,7 +20,7 @@ void Game::initWindow()
 {
     videoMode.height = 920;
     videoMode.width = 1600;
-    window = new sf::RenderWindow(sf::VideoMode(videoMode.width, videoMode.height), "Moja fajna gierka", sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar);
+    window = new sf::RenderWindow(sf::VideoMode(videoMode.width, videoMode.height), "Jakaœ fajna gierka", sf::Style::Resize | sf::Style::Close | sf::Style::Titlebar);
     window->setFramerateLimit(100);
 }
 
@@ -97,33 +98,17 @@ void Game::updateObjects()
         }
     }
     //Move the objects and updating
-    for (int i = 0; i < objects.size(); i++) {
+    //for (int i = 0; i < objects.size(); i++) {
 
-        objects[i].move(sf::Vector2f(1.f, 1.f));
-    }
+    //    objects[i].move(sf::Vector2f(1.f, 1.f));
+    //}
+
 }
 
 void Game::updateCollision()
 {
-    // Check collision Player - Objects
-    auto it = objects.begin();
-    while (it != objects.end()) {
-        bool collisionDetected = false;
-
-        for (size_t j = 0; j < player.getSegments().size(); j++) {
-            if (player.getSegments()[j].getGlobalBounds().intersects(it->getBounds())) {
-                player.grow(); 
-                collisionDetected = true;
-                break;
-            }
-        }
-
-        if (collisionDetected) {
-            it = objects.erase(it);  // Usuñ element i zwróæ iterator wskazuj¹cy na kolejny element
-        } else {
-            ++it;  // PrzejdŸ do kolejnego elementu
-        }
-    }
+    player.checkCollisionWithObjects(objects);
+    enemies.checkCollisionWithObjects(objects);
 }
 
 //functions
@@ -132,16 +117,19 @@ void Game::update() {
 
     spawnObjects();
     player.update(window);
+    enemies.update(window);
     updateCollision();
 
     if (endgame == false) {
         updateMousePositions();
         updateObjects();
     }
-    //endgame condition
-    if (player.hp <= 0) {
-        endgame = true;
-    }
+    ////endgame condition
+    //if (player.checkSelfCollision() == true)
+    //{
+    //    endgame = true;
+    //}
+
 }
 
 void Game::render() {
@@ -151,6 +139,7 @@ void Game::render() {
     for (auto i : objects) {
         i.render(*this->window);
     }
+    enemies.render(window);
     player.render(window);
 
     window->display();

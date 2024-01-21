@@ -10,6 +10,7 @@
 #include <cmath>
 #include "Player.h"
 #include "Object.h"
+#include "Enemies.h"
 
 /*
 	Class that acts as the game angine.
@@ -37,6 +38,8 @@ private:
 
 	//Objects
 	Player player;
+	//Enemies
+	Enemies enemies;
 	//food
 	std::vector <Object> objects;
 	float spawnTimerMax;
