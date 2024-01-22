@@ -116,10 +116,11 @@ void Game::updateObjects()
         }
     }
     //Move the objects and updating
-    for (int i = 0; i < objects.size(); i++) {
+    //for (int i = 0; i < objects.size(); i++) {
 
-        objects[i].move(sf::Vector2f(1.f, 1.f));
-    }
+    //    objects[i].move(sf::Vector2f(1.f, 1.f));
+    //}
+
 }
 
 void Game::updateEnemies()
